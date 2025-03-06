@@ -7,6 +7,10 @@ export async function loadModules() {
     const mbrModule = await import("../modules/mbr/index.js");
     registerModule("mbr", mbrModule.default);
 
+    // Example of another module import - uncomment when you create this module
+    // const financeModule = await import("../modules/finance/index.js");
+    // registerModule("finance", financeModule.default);
+
     // Set the default module to show on application load
     activateModule("mbr");
 
@@ -31,7 +35,7 @@ export function registerModule(id, moduleDefinition) {
   console.log(`Module '${id}' registered successfully`);
 }
 
-export function activateModule(moduleId) {
+export function activateModule(moduleId, submoduleId = null) {
   const moduleContainer = document.getElementById("module-container");
   if (!moduleContainer) return;
 
@@ -47,21 +51,8 @@ export function activateModule(moduleId) {
   moduleContainer.innerHTML = "";
 
   // Initialize the module and render it in the container
-  module.init(moduleContainer);
-
-  // Update active state in navigation
-  updateActiveNavItem(moduleId);
+  // Pass the submoduleId if it exists
+  module.init(moduleContainer, submoduleId);
 }
 
-function updateActiveNavItem(moduleId) {
-  const navItems = document.querySelectorAll("#main-navigation a");
-  navItems.forEach((item) => {
-    if (item.getAttribute("data-module-id") === moduleId) {
-      item.classList.add("text-primary", "font-medium");
-      item.classList.remove("text-gray-600");
-    } else {
-      item.classList.remove("text-primary", "font-medium");
-      item.classList.add("text-gray-600");
-    }
-  });
-}
+// The updateActiveNavItem function has been moved to navigation.js
